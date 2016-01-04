@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script src='../dist/iotEvents.js'></script>
+<div>
+	
+	<br/>
+	<input id='msg' type='text' />
+	<button type='button' onclick="triggerEvent('client-b')">Play movie</button>
+	
+	<br/> <br/>
+	<button type='button' onclick="pauseMovie()">Pause</button>
+	<button type='button' onclick="unPauseMovie()">unPause</button>
+	
+</div>
+<script>
+var iot = window.iotEvents.create("client-a");
+
+var triggerEvent = function(target) {
+	iot.trigger("play-movie", { title: document.getElementById("msg").value }, "thora");
+};
+
+var pauseMovie = function() {
+	iot.trigger("pause-movie", null, "thora");
+};
+
+var unPauseMovie = function() {
+	iot.trigger("unpause-movie", null, "thora");
+};
+</script>
+</body>
+</html>

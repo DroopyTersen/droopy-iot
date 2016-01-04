@@ -1,0 +1,31 @@
+{
+  "name": "droopy-iot",
+  "version": "1.0.0",
+  "description": "pubsub using firebase",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DroopyTersen/droopy-iot.git"
+  },
+  "author": "Andrew Petersen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DroopyTersen/droopy-iot/issues"
+  },
+  "homepage": "https://github.com/DroopyTersen/droopy-iot#readme",
+  "dependencies": {
+    "droopy-events": "0.0.0",
+    "firebase": "^2.3.1",
+    "guid": "0.0.12"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-browserify": "^0.5.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.4.2"
+  }
+}

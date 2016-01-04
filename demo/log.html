@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script src='../dist/iotEvents.js'></script>
+<div>
+	<ul id='log'>
+		
+	</ul>
+</div>
+<script>
+var iot = window.iotEvents.create("demo-logger");
+
+var logEvent = function(e) {
+	var html = "<li><pre>" + JSON.stringify(e) + "</pre></li>";
+	document.getElementById("log").innerHTML += html;
+	console.log(e);
+};
+
+iot.subscribe("log", logEvent);
+</script>
+</body>
+</html>

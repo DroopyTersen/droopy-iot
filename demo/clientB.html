@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script src='../dist/iotEvents.js'></script>
+<div>
+	<button type='button' onclick="triggerEvent()">Trigger</button>
+</div>
+<script>
+var iot = window.iotEvents.create("client-b");
+
+var triggerEvent = function() {
+	iot.trigger("play-movie", "Sicario", "thora");
+};
+
+var handleBtnClick = function(payload) {
+	alert(payload.msg);
+};
+iot.subscribe("btn-click", handleBtnClick)
+
+</script>
+</body>
+</html>
