@@ -34,19 +34,19 @@ var create = function(id) {
 	var unsubscribe = function(type, cb, target) {
 		fireBaseEvents.off(createKey(type, target), cb);
 	};
-
-	var trigger = function(type, payload, target) {
-		ref.child("events").child(Guid.raw()).set(createEvent(type, payload, target));
+	
+	var trigger = function(type, payload, target, source) {
+		ref.child("events").child(Guid.raw()).set(createEvent(type, payload, target, source));
 	};
 
-	var createEvent = function(type, payload, target) {
+	var createEvent = function(type, payload, target, source) {
 		target = target || device;
 		var timestamp = (new Date()).toISOString();
 		return {
 			timestamp: timestamp,
 			type: createKey(type, target),
 			payload: payload,
-			source: device,
+			source: source || device,
 			target: target
 		};
 	};

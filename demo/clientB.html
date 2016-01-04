@@ -12,7 +12,7 @@
 var iot = window.iotEvents.create("client-b");
 
 var triggerEvent = function() {
-	iot.trigger("play-movie", "Sicario", "thora");
+	iot.trigger("play-movie", { title}"Sicario", "thora");
 };
 
 var handleBtnClick = function(payload) {
