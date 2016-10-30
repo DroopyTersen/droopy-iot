@@ -14,12 +14,16 @@
 <script>
 var iot = window.droopyIot.register("client-b");
 var outputEvent = function(payload, event) {
-	document.getElementById("payload").innerHTML = JSON.stringify(payload, null, " ");
-	document.getElementById("event").innerHTML = JSON.stringify(event, null, " ");
+	document.getElementById("payload").innerHTML = JSON.stringify(payload, null, "  ");
+	document.getElementById("event").innerHTML = JSON.stringify(event, null, "  ");
 }
 iot.subscribe("play-movie", outputEvent);
 iot.subscribe("pause-movie", outputEvent);
 iot.subscribe("unpause-movie", outputEvent);
+iot.subscribe("last-event", function(payload, event){
+	var lastEventStr = document.getElementById("event").innerHTML
+	event.respond(JSON.parse(lastEventStr));
+})
 </script>
 </body>
 </html>

@@ -14,6 +14,10 @@
 	<br/> <br/>
 	<button type='button' onclick="pauseMovie()">Pause</button>
 	<button type='button' onclick="unPauseMovie()">unPause</button>
+	<button type='button' onclick="askForLastEvent()">Last Event</button>
+
+	<h4>Last Event</h4>
+	<pre id='last-event'></pre>
 	
 </div>
 <script>
@@ -30,6 +34,14 @@ var pauseMovie = function() {
 var unPauseMovie = function() {
 	iot.trigger("unpause-movie", null, "client-b");
 };
+
+var askForLastEvent = function() {
+	iot.request("last-event", {}, "client-b").then(payload => {
+		document.getElementById("last-event").innerHTML = JSON.stringify(payload, null, "  ");
+	})
+}
+
+
 </script>
 </body>
 </html>

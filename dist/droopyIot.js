@@ -78,18 +78,44 @@
 	
 	        var trigger = function trigger(key, payload) {
 	            var target = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _deviceId;
-	            var source = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : _deviceId;
+	            var responseKey = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "";
 	
 	            ensureConnection().then(function () {
 	                var timestamp = new Date().toISOString();
 	                var event = {
 	                    channel: target,
-	                    message: { key: key, payload: payload, source: source, timestamp: timestamp, target: target }
+	                    message: { key: key, payload: payload, timestamp: timestamp, target: target, responseKey: responseKey, source: _deviceId }
 	                };
 	                pubnub.publish(event, function (status, response) {
 	                    console.log(status, response);
 	                });
 	            });
+	        };
+	
+	        var request = function request(key, payload) {
+	            var target = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _deviceId;
+	            var source = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : _deviceId;
+	
+	            var deferred;
+	            ensureConnection().then(function () {
+	                var responseKey = Date.now();
+	                var responseHandler = function responseHandler(payload, e) {
+	                    // No point staying subscribed this this was a one and done thing
+	                    eventer.off(responseKey, responseHandler);
+	                    deferred.resolve(payload);
+	                };
+	                eventer.on(responseKey, responseHandler);
+	                trigger(key, payload, target, responseKey);
+	            });
+	            return new Promise(function (resolve, reject) {
+	                return deferred = { resolve: resolve, reject: reject };
+	            });
+	        };
+	
+	        var createResponseFunc = function createResponseFunc(event) {
+	            return event && event.message && event.message.responseKey ? function (payload) {
+	                return trigger(event.message.responseKey, payload, event.message.source);
+	            } : function () {};
 	        };
 	
 	        pubnub.addListener({
@@ -100,6 +126,7 @@
 	            },
 	            message: function message(event) {
 	                if (event.message && event.message.key) {
+	                    event.respond = createResponseFunc(event);
 	                    eventer.trigger(event.message.key, event.message.payload, event);
 	                }
 	            }
@@ -108,6 +135,7 @@
 	
 	        return {
 	            trigger: trigger,
+	            request: request,
 	            subscribe: function subscribe(key, handler) {
 	                eventer.on(key, handler);
 	            },
