@@ -4,22 +4,22 @@
 	<title></title>
 </head>
 <body>
-<script src='../dist/iotEvents.js'></script>
+<script src='../dist/droopyIot.js'></script>
 <div>
-	<button type='button' onclick="triggerEvent()">Trigger</button>
+	<h3>Payload</h3>
+	<pre id='payload'></pre>
+	<h3>Event</h3>
+	<pre id='event'></pre>
 </div>
 <script>
-var iot = window.iotEvents.create("client-b");
-
-var triggerEvent = function() {
-	iot.trigger("play-movie", { title}"Sicario", "thora");
-};
-
-var handleBtnClick = function(payload) {
-	alert(payload.msg);
-};
-iot.subscribe("btn-click", handleBtnClick)
-
+var iot = window.droopyIot.register("client-b");
+var outputEvent = function(payload, event) {
+	document.getElementById("payload").innerHTML = JSON.stringify(payload, null, " ");
+	document.getElementById("event").innerHTML = JSON.stringify(event, null, " ");
+}
+iot.subscribe("play-movie", outputEvent);
+iot.subscribe("pause-movie", outputEvent);
+iot.subscribe("unpause-movie", outputEvent);
 </script>
 </body>
 </html>

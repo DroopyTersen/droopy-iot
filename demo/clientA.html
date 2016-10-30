@@ -4,7 +4,7 @@
 	<title></title>
 </head>
 <body>
-<script src='../dist/iotEvents.js'></script>
+<script src='../dist/droopyIot.js'></script>
 <div>
 	
 	<br/>
@@ -17,18 +17,18 @@
 	
 </div>
 <script>
-var iot = window.iotEvents.create("client-a");
+var iot = window.droopyIot.register("client-a");
 
 var triggerEvent = function(target) {
-	iot.trigger("play-movie", { title: document.getElementById("msg").value }, "thora");
+	iot.trigger("play-movie", { title: document.getElementById("msg").value }, "client-b");
 };
 
 var pauseMovie = function() {
-	iot.trigger("pause-movie", null, "thora");
+	iot.trigger("pause-movie", null, "client-b");
 };
 
 var unPauseMovie = function() {
-	iot.trigger("unpause-movie", null, "thora");
+	iot.trigger("unpause-movie", null, "client-b");
 };
 </script>
 </body>

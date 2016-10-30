@@ -1,1 +1,1 @@
-module.exports = require("./src/iotEvents");
+module.exports = global.droopyIot = require("./src/iot-pubnub");
