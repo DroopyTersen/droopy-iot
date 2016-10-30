@@ -15,6 +15,7 @@ Just include `/dist/droopyIot.js` on your page.  This will give you `window.droo
 <script src='node_modules/droopy-iot/dist/droopyIot.js'></script>
 ```
 ## Example Usage
+For more complete example, check out the [demos](https://github.com/DroopyTersen/droopy-iot/tree/master/demo).
 ```javascript
 var iot = droopyIot.register("webserver-1");
 iot.subscribe("test-event", (payload) => {
@@ -29,17 +30,22 @@ iot.request("light-state", {}, "rasp-pi-1").then((payload) => {
 ```
 
 ## API
-`droopyIot.register(deviceId)` - Initial setup method
+### `droopyIot.register(deviceId)`
+Initial setup method
 ```javascript
 var iot = droopyIot.register("basement-pi");
 ```
 
-`iot.trigger(key, payload, targetDevice)` - Sends an event to the targeted device
+### `trigger(key, payload, targetDevice)`
+Sends an event to the targeted device
+
 ```javascript
 iot.trigger("toggle-light", { state: false }, "basement-pi")
 ```
 
-`iot.subscribe(key, handler)` - Attaches a function handler to the specified key. You will only handle events with a matching target device
+### `subscribe(key, handler)`
+Attaches a function handler to the specified key. You will only handle events with a matching target device
+
 ```javascript
 var handlers = {
     toggleLight(payload) { 
@@ -48,16 +54,22 @@ var handlers = {
 };
 iot.subscribe("toggle-light", handlers.toggleLight);
 ```
-`iot.unsubscribe(key, handler)` - Removes a function handler
+
+### `unsubscribe(key, handler)`
+Removes a function handler
+
 ```javascript
 iot.unsubscribe("toggle-light", handlers.toggleLight);
 ```
 
-`iot.request(key, payload, targetDevice)` - Sends a request to a targeted device and returns a promise that will be resolved
-when the targeted device responds.  The targeted subscriber can respond with `event.respond(payload)`
+### `request(key, payload, targetDevice)`
+Sends a request to a targeted device and returns a promise that will be resolved
+when the targeted device responds.  The targeted subscriber can respond 
+with `event.respond(payload)`
+
 ```javascript
 // If we had a web server asking the status of a light in the basement...
-var webServerIot = require("droopy-iot").register("webserver-1");
+var webServerIot = droopyIot.register("webserver-1");
 webServerIotiot.request("light-state", null, "basement-pi").then(payload => {
     console.log(payload) //this is the response from basement pi
 });
