@@ -5,11 +5,18 @@ Realtime device communication built on top of PubNub.
 ```
 npm install droopy-iot
 ```
-
-## Usage
-### Node.js Server
+### Node.js
 ```javascript
-var iot = require("droopy-iot").register("webserver-1");
+var droopyIot = require("droopy-iot");
+```
+### Browser
+Just include `/dist/droopyIot.js` on your page.  This will give you `window.droopyIot`
+```html
+<script src='node_modules/droopy-iot/dist/droopyIot.js'></script>
+```
+## Example Usage
+```javascript
+var iot = droopyIot.register("webserver-1");
 iot.subscribe("test-event", (payload) => {
     console.log(payload);
 })
