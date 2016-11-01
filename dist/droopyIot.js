@@ -76,20 +76,26 @@
 	
 	        var _deviceId = deviceId;
 	
+	        var _trigger = function _trigger(message) {
+	            return new Promise(function (resolve, reject) {
+	                if (message.key && message.target && message.source) {
+	                    ensureConnection().then(function () {
+	                        message.timestamp = message.timestamp || new Date().toISOString();
+	                        var event = { message: message, channel: message.target };
+	                        pubnub.publish(event, function (status, response) {
+	                            return resolve({ status: status, response: response });
+	                        });
+	                    });
+	                }
+	            });
+	        };
+	
 	        var trigger = function trigger(key, payload) {
 	            var target = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _deviceId;
 	            var responseKey = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "";
 	
-	            ensureConnection().then(function () {
-	                var timestamp = new Date().toISOString();
-	                var event = {
-	                    channel: target,
-	                    message: { key: key, payload: payload, timestamp: timestamp, target: target, responseKey: responseKey, source: _deviceId }
-	                };
-	                pubnub.publish(event, function (status, response) {
-	                    console.log(status, response);
-	                });
-	            });
+	            var message = { key: key, payload: payload, target: target, responseKey: responseKey, source: _deviceId };
+	            return _trigger(message);
 	        };
 	
 	        var request = function request(key, payload) {
@@ -128,18 +134,20 @@
 	                if (event.message && event.message.key) {
 	                    event.respond = createResponseFunc(event);
 	                    eventer.trigger(event.message.key, event.message.payload, event);
+	                    eventer.trigger("*", event.message.payload, event);
 	                }
 	            }
 	        });
 	        pubnub.subscribe({ channels: [_deviceId] });
 	
 	        return {
+	            _trigger: _trigger,
 	            trigger: trigger,
 	            request: request,
 	            subscribe: function subscribe(key, handler) {
 	                eventer.on(key, handler);
 	            },
-	            unsubscribe: function unsubscribe() {
+	            unsubscribe: function unsubscribe(key, handler) {
 	                eventer.off(key, handler);
 	            }
 	        };

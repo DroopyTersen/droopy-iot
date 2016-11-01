@@ -1,1 +1,1 @@
-module.exports = global.droopyIot = require("./src/iot-pubnub");
+require("./entries/entry.browser");

@@ -18,17 +18,21 @@ module.exports = {
 
         var _deviceId = deviceId;
 
-        var trigger = function(key, payload, target = _deviceId, responseKey = "") {
-            ensureConnection().then(() => {
-                var timestamp = (new Date()).toISOString();
-                var event = {
-                    channel: target,
-                    message: { key, payload, timestamp, target, responseKey, source: _deviceId }
-                };
-                pubnub.publish(event, function(status, response) {
-                    console.log(status, response);
-                })
+        var _trigger = function(message) {
+            return new Promise((resolve, reject) => {
+                if (message.key && message.target && message.source) {
+                    ensureConnection().then(() => {
+                        message.timestamp = message.timestamp || (new Date()).toISOString();
+                        var event = { message, channel: message.target };
+                        pubnub.publish(event, (status, response) => resolve({ status, response }));
+                    })
+                }
             })
+        };
+
+        var trigger = function(key, payload, target = _deviceId, responseKey = "") {
+            var message = { key, payload, target, responseKey, source: _deviceId };
+            return _trigger(message)
         };
 
 
@@ -63,18 +67,20 @@ module.exports = {
                 if (event.message && event.message.key) { 
                     event.respond = createResponseFunc(event);
                     eventer.trigger(event.message.key, event.message.payload, event);
+                    eventer.trigger("*", event.message.payload, event);
                 }
             }
         });
         pubnub.subscribe({ channels: [_deviceId] });
 
         return {
+            _trigger,
             trigger,
             request,
             subscribe: (key, handler) => {
                 eventer.on(key, handler)
             },
-            unsubscribe() {
+            unsubscribe(key, handler) {
                 eventer.off(key, handler)
             }
         }

@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Trigger IOT Events</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css">
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+	<script src="/dist/droopyIot.js"></script>
+	<style>
+		#main-content {
+			padding: 20px;
+			text-align: center;
+            width: 400px;
+            margin: 0 auto;
+		}
+         .pure-form fieldset {
+             text-align: left;
+             min-width:200px;
+         }           
+         .pure-form fieldset input, .pure-form fieldset textarea {
+             width: 100%;
+             margin-bottom: 20px !important
+         }
+         .pure-form label {
+             font-weight: bold;
+         }
+
+	</style>
+</head>
+
+<body>
+	<div id='main-content'>
+		<h1>Droopy Internet of Things</h1>
+		<h2>Trigger Event</h2>
+		<form class="pure-form pure-form-stacked">
+			<fieldset>
+				<label for="event-key">Key</label>
+				<input id="event-key" placeholder="play-movie" value='play-movie'>
+
+				<label for="event-target">Target</label>
+				<input id="event-target"placeholder="basement-pi" value='client-b'>
+
+				<label for="event-source">Source</label>
+				<input id="event-source" value="droopy-iot-trigger-page">
+
+				<label for="event-source">Payload</label>
+                <textarea id='event-payload' placeholder="Enter valid JSON..."></textarea>
+
+				<button id="trigger-btn" type="submit" class="pure-button pure-button-primary">Trigger</button>
+			</fieldset>
+		</form>
+	</div>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script>
+        (function() {
+            var $form = $("form");
+            var handleSubmit = function(e) {
+                try {
+                    e.preventDefault();
+                    var payload = $("#event-payload").val();
+                    if (payload) payload = JSON.parse(payload);
+                    var postBody = {
+                        key: $("#event-key").val(),
+                        target: $("#event-target").val(),
+                        source: $("#event-source").val(),
+                        payload: payload
+                    };
+                    $.ajax({
+                        url: "/trigger",
+                        method: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify(postBody)
+                    })
+
+                } catch(err) {
+                    console.log(err);
+                    alert(err.message);
+                }
+                
+            }
+            $form.on("submit", handleSubmit)
+        })()
+
+    </script>
+</body>
+
+</html>

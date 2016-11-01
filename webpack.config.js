@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./index.js",
+    entry: "./entries/entry.core.js",
     output: {
         path: __dirname + "/dist",
         filename: "droopyIot.js",

@@ -12,7 +12,7 @@ server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
 
-var iot = require("../index").register("demo-server");
+var iot = require("../entries/entry.browser").register("demo-server");
 iot.subscribe("test-key", (payload) => {
     console.log(payload);
 })

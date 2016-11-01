@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Trigger IOT Events</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css">
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+	<script src="/dist/droopyIot.js"></script>
+	<style>
+		#main-content {
+			padding: 20px;
+			text-align: center;
+            width: 700px;
+            margin: 0 auto;
+		}
+         .pure-form fieldset {
+             text-align: left;
+             min-width:200px;
+         }           
+         .pure-form fieldset input, .pure-form fieldset textarea {
+             width: 100%;
+             margin-bottom: 20px !important
+         }
+         .pure-form label {
+             font-weight: bold;
+         }
+         pre {
+             text-align:left;
+             padding: 5px;
+             border: #ccc;
+             background:#f3f3f3;
+         }
+	</style>
+</head>
+
+<body>
+	<div id='main-content'>
+		<h1>Droopy Internet of Things</h1>
+		<h2>Event Listener</h2>
+		<form class="pure-form pure-form-stacked">
+			<fieldset>
+				<label for="device-id">Device ID</label>
+				<input id="device-id" placeholder="basement-pi">
+                <button id="trigger-btn" type="submit" class="pure-button pure-button-primary">Listen</button>
+			</fieldset>
+		</form>
+        <div id='event-stream'></div>
+	</div>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script>
+        (function() {
+            var iot;
+            var $form = $("form");
+            var updateStream = function(payload, iotEvent) {
+                $("#event-stream").prepend(`<pre>${JSON.stringify(iotEvent, null, "  ")}</pre>`);
+            };
+            var handleSubmit = function(e) {
+                e.preventDefault();
+                try {
+                    if (iot) iot.unsubscribe("*", updateStream);
+                    iot = droopyIot.register($("#device-id").val());
+                    iot.subscribe("*", updateStream);
+
+                } catch(err) {
+                    console.log(err);
+                    alert(err.message);
+                }
+            }
+            $form.on("submit", handleSubmit)
+        })()
+
+    </script>
+</body>
+
+</html>

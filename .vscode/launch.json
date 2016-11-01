@@ -5,7 +5,7 @@
             "name": "Launch",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceRoot}\\demo\\server.js",
+            "program": "${workspaceRoot}\\demo\\iotserver.js",
             "stopOnEntry": false,
             "args": [],
             "cwd": "${workspaceRoot}",
