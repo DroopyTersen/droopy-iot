@@ -72,7 +72,9 @@
                         contentType: "application/json",
                         data: JSON.stringify(postBody)
                     }).then(function() {
-                        alert("success");
+                        setTimeout(function(){
+                            alert("success");
+                        }, 200);
                     })
 
                 } catch(err) {
