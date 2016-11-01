@@ -19,7 +19,9 @@
   },
   "homepage": "https://github.com/DroopyTersen/droopy-iot#readme",
   "dependencies": {
+    "body-parser": "^1.15.2",
     "droopy-events": "0.0.0",
+    "express": "^4.14.0",
     "pubnub": "^4.2.0"
   },
   "devDependencies": {
