@@ -30,13 +30,16 @@ module.exports = {
             })
         };
 
-        var trigger = function(key, payload, target = _deviceId, responseKey = "") {
+        var trigger = function(key, payload, target, responseKey) {
+            target = target || _deviceId;
             var message = { key, payload, target, responseKey, source: _deviceId };
             return _trigger(message)
         };
 
 
-        var request = function(key, payload, target = _deviceId, source = _deviceId) {
+        var request = function(key, payload, target, source) {
+            target = target || _deviceId;
+            source = source || _deviceId;
             var deferred;
             ensureConnection().then(() => {
                 var responseKey = Date.now();

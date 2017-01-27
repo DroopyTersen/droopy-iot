@@ -1,6 +1,6 @@
 {
   "name": "droopy-iot",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Realtime device communication built on top of PubNub.",
   "main": "index.js",
   "scripts": {

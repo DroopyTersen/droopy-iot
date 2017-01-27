@@ -1,1 +1,1 @@
-require("./entries/entry.browser");
+module.exports = require("./entries/entry.core");

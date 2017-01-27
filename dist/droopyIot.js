@@ -90,18 +90,15 @@
 	            });
 	        };
 	
-	        var trigger = function trigger(key, payload) {
-	            var target = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _deviceId;
-	            var responseKey = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "";
-	
+	        var trigger = function trigger(key, payload, target, responseKey) {
+	            target = target || _deviceId;
 	            var message = { key: key, payload: payload, target: target, responseKey: responseKey, source: _deviceId };
 	            return _trigger(message);
 	        };
 	
-	        var request = function request(key, payload) {
-	            var target = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _deviceId;
-	            var source = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : _deviceId;
-	
+	        var request = function request(key, payload, target, source) {
+	            target = target || _deviceId;
+	            source = source || _deviceId;
 	            var deferred;
 	            ensureConnection().then(function () {
 	                var responseKey = Date.now();
